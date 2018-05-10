@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Android 框架模式MVC的使用</title>
+  <meta name="description" content="[TOC]">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Android 框架模式MVC的使用">
+  <meta name="twitter:description" content="[TOC]">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Android 框架模式MVC的使用">
+  <meta property="og:description" content="[TOC]">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/03/Android-%E6%A1%86%E6%9E%B6%E6%A8%A1%E5%BC%8FMVC%E7%9A%84%E4%BD%BF%E7%94%A8/">
+  <link rel="alternate" type="application/rss+xml" title="Wazing" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Wazing 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Wazing logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Wazing" class="blog-button">Wazing</a></h1>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">无醇酒美人，不愿来此人间，无快剑挚友，不愿老此江湖。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/wz1509" title="@wz1509 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:727417703@qq.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-disabled"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-03-07 15:32:24 +0900" itemprop="datePublished" class="post-meta__date date">2018-03-07</time> &#8226; <span class="post-meta__tags tags">Android 开发模式</span>
+    </div>
+    <h1 class="post-title">Android 框架模式MVC的使用</h1>
+  </header>
+
+  <section class="post">
+    <p>[TOC]</p>
+
+<h3 id="mvc概念">MVC概念</h3>
+
+<p>​	<a href="https://baike.baidu.com/item/MVC">MVC</a>全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用一种业务逻辑、数据、界面显示分离的方法组织代码，将业务逻辑聚集到一个部件里面，在改进和个性化定制界面及用户交互的同时，不需要重新编写业务逻辑。MVC被独特的发展起来用于映射传统的输入、处理和输出功能在一个逻辑的图形化用户界面的结构中。</p>
+
+<h3 id="mvc编程模式">MVC编程模式</h3>
+
+<p>MVC 是一种使用 MVC（Model View Controller 模型-视图-控制器）设计创建 Web 应用程序的模式：</p>
+
+<ul>
+  <li>Model（模型）表示应用程序核心（比如数据库记录列表）。</li>
+  <li>View（视图）显示数据（数据库记录）。</li>
+  <li>Controller（控制器）处理输入（写入数据库记录）。</li>
+</ul>
+
+<p>MVC 模式同时提供了对 HTML、CSS 和 JavaScript 的完全控制。</p>
+
+<p><strong>Model（模型）</strong>是应用程序中用于处理应用程序数据逻辑的部分。
+　　通常模型对象负责在数据库中存取数据。</p>
+
+<p><strong>View（视图）</strong>是应用程序中处理数据显示的部分。
+　　通常视图是依据模型数据创建的。</p>
+
+<p><strong>Controller（控制器）</strong>是应用程序中处理用户交互的部分。
+　　通常控制器负责从视图读取数据，控制用户输入，并向模型发送数据。</p>
+
+<p>MVC 分层有助于管理复杂的应用程序，因为您可以在一个时间内专门关注一个方面。例如，您可以在不依赖业务逻辑的情况下专注于视图设计。同时也让应用程序的测试更加容易。</p>
+
+<p>MVC 分层同时也简化了分组开发。不同的开发人员可同时开发视图、控制器逻辑和业务逻辑。</p>
+
+<h3 id="mvc模型图">MVC模型图</h3>
+
+<p>![1611520413724<em>.pic](/Users/wangzheng/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/64b9182e40f99f0b4837f8899be59734/Message/MessageTemp/2b5a123eb7769d0768a2e22d37c20880/Image/1611520413724</em>.pic.jpg)</p>
+
+<h3 id="mvc-for-android">MVC for Android</h3>
+
+<p>在Android开发中，比较流行的开发框架模式采用的是MVC框架模式，采用MVC模式的好处是便于UI界面部分的显示和业务逻辑，数据处理分开。那么Android项目中哪些代码来充当M,V,C角色呢？</p>
+
+<ol>
+  <li>M层：适合做一些业务逻辑处理，比如数据库存取操作，网络操作，复杂的算法，耗时的任务等都在model层处理。</li>
+  <li>V层：应用层中处理数据显示的部分，XML布局可以视为V层，显示Model层的数据结果。</li>
+  <li>C层：在Android中，Activity处理用户交互问题，因此可以认为Activity是控制器，Activity读取V视图层的数据（当前的请求数据按钮），控制用户点击（请求输入Button），并向Model发送数据请求（发起网络请求，回调给V视图显示数据）。</li>
+</ol>
+
+<p>接下来我们通过一个小项目来解读MVC在Android中的使用。先上一个界面图：</p>
+
+<p>![1631520413854<em>.pic](/Users/wangzheng/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/64b9182e40f99f0b4837f8899be59734/Message/MessageTemp/2b5a123eb7769d0768a2e22d37c20880/Image/1631520413854</em>.pic.jpg)</p>
+
+<h4 id="controller控制器">Controller控制器</h4>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">(),</span> <span class="n">OnGankListener</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="k">lateinit</span> <span class="kd">var</span> <span class="py">gankModel</span><span class="p">:</span> <span class="n">GankModel</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+        <span class="n">setContentView</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">activity_main</span><span class="p">)</span>
+
+        <span class="n">gankModel</span> <span class="p">=</span> <span class="n">GankModelImpl</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+
+        <span class="n">btn_request_data</span><span class="p">.</span><span class="n">setOnClickListener</span><span class="p">({</span>
+            <span class="n">gankModel</span><span class="p">.</span><span class="n">showLoading</span><span class="p">(</span><span class="k">this</span><span class="p">)</span>
+            <span class="n">gankModel</span><span class="p">.</span><span class="n">getGankList</span><span class="p">()</span>
+        <span class="p">})</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onSuccess</span><span class="p">(</span><span class="n">json</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tv_content</span><span class="p">.</span><span class="n">run</span> <span class="p">{</span>
+            <span class="n">setTextColor</span><span class="p">(</span><span class="n">ContextCompat</span><span class="p">.</span><span class="n">getColor</span><span class="p">(</span><span class="k">this</span><span class="n">@MainActivity</span><span class="p">,</span> <span class="n">R</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">default_text_color</span><span class="p">))</span>
+            <span class="n">text</span> <span class="p">=</span> <span class="n">json</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onFailed</span><span class="p">(</span><span class="n">msg</span><span class="p">:</span> <span class="n">String</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">tv_content</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">msg</span>
+        <span class="n">tv_content</span><span class="p">.</span><span class="n">setTextColor</span><span class="p">(</span><span class="n">ContextCompat</span><span class="p">.</span><span class="n">getColor</span><span class="p">(</span><span class="k">this</span><span class="p">,</span> <span class="n">R</span><span class="p">.</span><span class="n">color</span><span class="p">.</span><span class="n">holo_red_dark</span><span class="p">))</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onTerminate</span><span class="p">()</span> <span class="p">{</span>
+        <span class="n">gankModel</span><span class="p">.</span><span class="n">hideLoading</span><span class="p">()</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>从上面代码可以看到，Activity持有了GankModel模型的对象，当用户有点击Button交互的时候，Activity作为Controller控制层收到用户点击的按钮监听，然后向Model模型发起数据请求，也就是调用GankModel对象的方法 getGankList()方法。当Model模型处理数据结束后，通过接口OnGankListener通知View视图层数据处理完毕，View视图层该更新界面UI了。然后View视图层调用onSuccess()方法更新UI。至此，整个MVC框架流程就在Activity中体现出来了。</p>
+
+<h4 id="model模型">Model模型</h4>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="kd">interface</span> <span class="nc">GankModel</span> <span class="p">{</span>
+
+    <span class="k">fun</span> <span class="nf">showLoading</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span>
+
+    <span class="k">fun</span> <span class="nf">hideLoading</span><span class="p">()</span>
+
+    <span class="k">fun</span> <span class="nf">getGankList</span><span class="p">()</span>
+
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">GankModelImpl</span> <span class="k">constructor</span><span class="p">(</span><span class="k">private</span> <span class="kd">val</span> <span class="py">view</span><span class="p">:</span> <span class="n">OnGankListener</span><span class="p">)</span> <span class="p">:</span> <span class="n">GankModel</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="kd">var</span> <span class="py">loadingDialog</span><span class="p">:</span> <span class="n">AlertDialog</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">showLoading</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">loadingDialog</span> <span class="p">==</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kd">val</span> <span class="py">builder</span> <span class="p">=</span> <span class="n">AlertDialog</span><span class="p">.</span><span class="n">Builder</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+            <span class="n">builder</span><span class="p">.</span><span class="n">setMessage</span><span class="p">(</span><span class="s">"请求中..."</span><span class="p">)</span>
+            <span class="n">loadingDialog</span> <span class="p">=</span> <span class="n">builder</span><span class="p">.</span><span class="n">create</span><span class="p">()</span>
+        <span class="p">}</span>
+        <span class="n">loadingDialog</span><span class="o">!!</span><span class="p">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">hideLoading</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">loadingDialog</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span>
+            <span class="n">loadingDialog</span><span class="o">!!</span><span class="p">.</span><span class="n">dismiss</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">getGankList</span><span class="p">()</span> <span class="p">{</span>
+        <span class="kd">val</span> <span class="py">api</span><span class="p">:</span> <span class="n">GankService</span> <span class="p">=</span> <span class="n">RetrofitModel</span><span class="p">().</span><span class="n">createApi</span><span class="p">(</span><span class="n">GankService</span><span class="o">::</span><span class="k">class</span><span class="p">.</span><span class="n">java</span><span class="p">,</span> <span class="n">GankService</span><span class="p">.</span><span class="n">BASE_URL</span><span class="p">)</span>
+
+        <span class="n">api</span><span class="p">.</span><span class="n">getGankList</span><span class="p">(</span><span class="s">"Android"</span><span class="p">,</span> <span class="m">5</span><span class="p">,</span> <span class="m">1</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">compose</span><span class="p">(</span><span class="n">RxSchedulers</span><span class="p">.</span><span class="n">ioMain</span><span class="p">())</span>
+                <span class="p">.</span><span class="n">doOnTerminate</span> <span class="p">{</span>
+                    <span class="n">view</span><span class="p">.</span><span class="n">onTerminate</span><span class="p">()</span>
+                <span class="p">}</span>
+                <span class="p">.</span><span class="n">subscribe</span><span class="p">({</span>
+                    <span class="n">view</span><span class="p">.</span><span class="n">onSuccess</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="n">string</span><span class="p">())</span>
+                <span class="p">},</span> <span class="p">{</span>
+                    <span class="n">view</span><span class="p">.</span><span class="n">onFailed</span><span class="p">(</span><span class="n">it</span><span class="p">.</span><span class="n">message</span><span class="o">!!</span><span class="p">)</span>
+                <span class="p">})</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>以上代码看出，这里设计了一个GankModel模型接口，然后实现了接口GankModelImpl类。controller控制器activity调用GankModelImpl类中的方法发起网络请求，然后通过实现OnGankListener接口来获得网络请求的结果通知View视图层更新UI 。至此，Activity就将View视图显示和Model模型数据处理隔离开了。activity担当contronller完成了model和view之间的协调作用。</p>
+
+<h3 id="mvc使用总结">MVC使用总结</h3>
+
+<ol>
+  <li>利用MVC设计模式，使得这个小项目有了很好的可扩展和维护性，当需要改变UI显示的时候，无需修改Contronller（控制器）Activity的代码和Model（模型）GankModel模型中的业务逻辑代码，很好的将业务逻辑和界面显示分离。</li>
+  <li>在Android项目中，业务逻辑，数据处理等担任了Model（模型）角色，XML界面显示等担任了View（视图）角色，Activity担任了Contronller（控制器）角色。contronller（控制器）是一个中间桥梁的作用，通过接口通信来协同 View（视图）和Model（模型）工作，起到了两者之间的通信作用。</li>
+  <li>什么时候适合使用MVC设计模式？当然一个小的项目且无需频繁修改需求就不用MVC框架来设计了，那样反而觉得代码过度设计，代码臃肿。一般在大的项目中，且业务逻辑处理复杂，页面显示比较多，需要模块化设计的项目使用MVC就有足够的优势了。</li>
+  <li>在MVC模式中我们发现，其实控制器Activity主要是起到解耦作用，将View视图和Model模型分离，虽然Activity起到交互作用，但是找Activity中有很多关于视图UI的显示代码，因此View视图和Activity控制器并不是完全分离的，也就是说一部分View视图和Contronller控制器Activity是绑定在一个类中的。</li>
+  <li>MVC的优点：
+    <ul>
+      <li>耦合性低。所谓耦合性就是模块代码之间的关联程度。利用MVC框架使得View（视图）层和Model（模型）层可以很好的分离，这样就达到了解耦的目的，所以耦合性低，减少模块代码之间的相互影响。</li>
+      <li>可扩展性好。由于耦合性低，添加需求，扩展代码就可以减少修改之前的代码，降低bug的出现率。</li>
+      <li>模块职责划分明确。主要划分层M,V,C三个模块，利于代码的维护。</li>
+    </ul>
+  </li>
+</ol>
+
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2016/02/hello-world-vno/" title="link to Hello World - Vno">Hello World - Vno</a></h2>
+       <p class="excerpt">What’s thisVno Jekyll is a theme for Jekyll. It is a port of my Ghost theme vno, which is originally developed from Dale Anthony’s Uno.Usage$ git clone https://github.com/onevcat/vno-jekyll.git your_site$ cd your_site$ bundler install$ bundler exe...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2016-02-16 15:32:24 +0900" class="post-list__meta--date date">2016-02-16</time> &#8226; <span class="post-list__meta--tags tags"></span><a class="btn-border-small" href=/2016/02/hello-world-vno/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-05-10 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
