@@ -36,9 +36,7 @@ MVC 分层同时也简化了分组开发。不同的开发人员可同时开发�
 
 ### MVC模型图
 
-![1611520413724_.pic](/Users/wangzheng/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/64b9182e40f99f0b4837f8899be59734/Message/MessageTemp/2b5a123eb7769d0768a2e22d37c20880/Image/1611520413724_.pic.jpg)
-
-
+![MVC模型图.jpg](http://p8i9mda7f.bkt.clouddn.com/18-5-10/30205173.jpg)
 
 ### MVC for Android
 
@@ -50,7 +48,7 @@ MVC 分层同时也简化了分组开发。不同的开发人员可同时开发�
 
 接下来我们通过一个小项目来解读MVC在Android中的使用。先上一个界面图：
 
-![1631520413854_.pic](/Users/wangzheng/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/64b9182e40f99f0b4837f8899be59734/Message/MessageTemp/2b5a123eb7769d0768a2e22d37c20880/Image/1631520413854_.pic.jpg)
+![result.jpg](http://p8i9mda7f.bkt.clouddn.com/18-5-10/59822984.jpg)
 
 #### Controller控制器
 
