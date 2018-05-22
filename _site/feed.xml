@@ -5,9 +5,468 @@
     <description>无醇酒美人，不愿来此人间，无快剑挚友，不愿老此江湖。</description>
     <link>http://localhost:4000/</link>
     <atom:link href="http://localhost:4000/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 10 May 2018 16:59:49 +0800</pubDate>
-    <lastBuildDate>Thu, 10 May 2018 16:59:49 +0800</lastBuildDate>
+    <pubDate>Tue, 22 May 2018 17:56:15 +0800</pubDate>
+    <lastBuildDate>Tue, 22 May 2018 17:56:15 +0800</lastBuildDate>
     <generator>Jekyll v3.4.0</generator>
+    
+      <item>
+        <title>如何移除你的Kotlin代码中所有!!</title>
+        <description>&lt;p&gt;[TOC]&lt;/p&gt;
+
+&lt;p&gt;原标题：&lt;strong&gt;How to remove all !! from your Kotlin code&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;原文地址：&lt;a href=&quot;https://android.jlelse.eu/how-to-remove-all-from-your-kotlin-code-87dc2c9767fb&quot;&gt;https://android.jlelse.eu/how-to-remove-all-from-your-kotlin-code-87dc2c9767fb&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;原文作者：&lt;a href=&quot;https://android.jlelse.eu/@david.vavra?source=post_header_lockup&quot;&gt;David Vávra&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;作者本篇源码地址：&lt;a href=&quot;https://gist.github.com/davidvavra&quot;&gt;https://gist.github.com/davidvavra&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;如何移除你的kotlin代码中所有&quot;&gt;如何移除你的Kotlin代码中所有&lt;code class=&quot;highlighter-rouge&quot;&gt;!!&lt;/code&gt;&lt;/h1&gt;
+
+&lt;p&gt;空安全特性是&lt;a href=&quot;https://kotlinlang.org/&quot;&gt;Kotlin&lt;/a&gt;语言最好语法特性之一。它让你在语言层面来考虑可空性，以致于你可以避免很多在Java中常见的隐藏空指针异常。然而当你通过工具自动将Java代码转化成Kotlin时，你会发现有很多的 &lt;code class=&quot;highlighter-rouge&quot;&gt;!!&lt;/code&gt; 标记出现。按道理在你的代码中不应该有任何的 &lt;code class=&quot;highlighter-rouge&quot;&gt;!!&lt;/code&gt; 出现，除非它是一个快速原型。并且我相信这是对的，因为 &lt;code class=&quot;highlighter-rouge&quot;&gt;!!&lt;/code&gt; 的出现基本上的意味着 “你这里有可能存在未处理的 &lt;code class=&quot;highlighter-rouge&quot;&gt;KotlinNullPointerException&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;Kotlin有一些智能的机制去避免这些空指针的问题，但是弄明白它并不是那么直接和容易。这里有6种方法去做到这一点：&lt;/p&gt;
+
+&lt;h2 id=&quot;1使用val而不是var&quot;&gt;1）使用&lt;code class=&quot;highlighter-rouge&quot;&gt;val&lt;/code&gt;而不是&lt;code class=&quot;highlighter-rouge&quot;&gt;var&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Kotlin&lt;/strong&gt;让你在语言层面思考不变性，这点看起来很不错。 &lt;code class=&quot;highlighter-rouge&quot;&gt;val&lt;/code&gt;是只读的，&lt;code class=&quot;highlighter-rouge&quot;&gt;var&lt;/code&gt;是可变的。 建议尽可能多地使用只读属性。 它们是线程安全的，并且在函数式编程方面效果很好。 如果你使用它们作为不可变项，你不必关心可空性。 只要注意&lt;code class=&quot;highlighter-rouge&quot;&gt;val&lt;/code&gt;可以实际上是可变的。&lt;/p&gt;
+
+&lt;h2 id=&quot;2使用lateinit&quot;&gt;2）使用&lt;code class=&quot;highlighter-rouge&quot;&gt;lateinit&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;有时你不能使用不可变属性。例如，它发生在Android上，当一些属性在&lt;strong&gt;onCreate()&lt;/strong&gt;调用中被初始化时。对于这些情况，&lt;strong&gt;Kotlin&lt;/strong&gt;具有称为&lt;code class=&quot;highlighter-rouge&quot;&gt;lateinit&lt;/code&gt;的语言功能。&lt;/p&gt;
+
+&lt;p&gt;它可以让你取代这个：&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;private&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;mAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RecyclerAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Transaction&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;&amp;gt;?&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;override&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Bundle&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;?)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;super&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;onCreate&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;savedInstanceState&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;mAdapter&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;RecyclerAdapter&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;R&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;layout&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;item_transaction&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;updateTransactions&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;mAdapter&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;notifyDataSetChanged&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;()&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;等同这个：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;private lateinit var mAdapter: RecyclerAdapter&amp;lt;Transaction&amp;gt;
+
+override fun onCreate(savedInstanceState: Bundle?) {
+   super.onCreate(savedInstanceState)
+   mAdapter = RecyclerAdapter(R.layout.item_transaction)
+}
+
+fun updateTransactions() {
+   mAdapter.notifyDataSetChanged()
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;请注意，访问未初始化的&lt;code class=&quot;highlighter-rouge&quot;&gt;lateinit&lt;/code&gt;属性将导致&lt;strong&gt;UninitializedPropertyAccessException&lt;/strong&gt;。&lt;/p&gt;
+
+&lt;p&gt;遗憾的是&lt;code class=&quot;highlighter-rouge&quot;&gt;lateinit&lt;/code&gt;不适用于原始数据类型，比如像&lt;code class=&quot;highlighter-rouge&quot;&gt;Int&lt;/code&gt;这样的基本数据类型。对于原始类型，您可以使用这样的代理：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;private var mNumber: Int by Delegates.notNull&amp;lt;Int&amp;gt;()
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;3-使用let函数&quot;&gt;3) 使用&lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt;函数&lt;/h2&gt;
+
+&lt;p&gt;这是Kotlin代码中的常见编译时错误：&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;https://cdn-images-1.medium.com/max/1600/1*qJKE9v8-G1yFh64cRFcjPg.png&quot; alt=&quot;img&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;令我恼火的是：我知道这个可变属性在空检查后不能改变。许多开发人员通过以下方式快速修复它：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;private var mPhotoUrl: String? = null
+
+fun uploadClicked() {
+    if (mPhotoUrl != null) {
+        uploadPhoto(mPhotoUrl!!)
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;但是有一个使用&lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt;函数的优雅解决方案：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;private var mPhotoUrl: String? = null
+
+fun uploadClicked() {
+    mPhotoUrl?.let { uploadPhoto(it) }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;4创建全局函数来处理更复杂的案例&quot;&gt;4）创建全局函数来处理更复杂的案例&lt;/h2&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt;是一个简单的空检查的很好的替代品，但可能会有更复杂的情况。例如：&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mUserName&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mPhotoUrl&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;uploadPhoto&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mUserName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mPhotoUrl&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;你可以嵌套两个&lt;code class=&quot;highlighter-rouge&quot;&gt;let&lt;/code&gt;调用，但那不会很好读。在&lt;strong&gt;Kotlin&lt;/strong&gt;中，你可以拥有全局可访问的功能，所以你可以轻松地构建你需要的功能，就像这样使用：&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;n&quot;&gt;ifNotNull&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mUserName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mPhotoUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;userName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;photoUrl&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;-&amp;gt;&lt;/span&gt;
+   &lt;span class=&quot;n&quot;&gt;uploadPhoto&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;userName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;photoUrl&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;源码为：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;fun &amp;lt;T1, T2&amp;gt; ifNotNull(value1: T1?, value2: T2?, bothNotNull: (T1, T2) -&amp;gt; (Unit)) {
+   if (value1 != null &amp;amp;&amp;amp; value2 != null) {
+       bothNotNull(value1, value2)
+   }
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;5使用elvis操作符&quot;&gt;5）使用&lt;code class=&quot;highlighter-rouge&quot;&gt;Elvis&lt;/code&gt;操作符&lt;/h2&gt;
+
+&lt;p&gt;如果您有空情况下的回退值，则&lt;code class=&quot;highlighter-rouge&quot;&gt;Elvis&lt;/code&gt;运算符非常好。所以你可以取代这个：&lt;/p&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;getUserName&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;():&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+   &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;mUserName&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;mUserName&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;!!&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+       &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;Anonymous&quot;&lt;/span&gt;
+   &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;等同这个：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;fun getUserName(): String {
+   return mUserName ?: &quot;Anonymous&quot;
+}		
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;6按自己的条件崩溃&quot;&gt;6）按自己的条件崩溃&lt;/h2&gt;
+
+&lt;p&gt;即使类型必须为空，仍然有些情况下您知道某些内容不能为空。 如果它为空，这是代码中的一个bug，你应该知道它。 但是抛弃&lt;code class=&quot;highlighter-rouge&quot;&gt;!!&lt;/code&gt;，系统会给你一个很难debug的&lt;strong&gt;KotlinNullPointerException&lt;/strong&gt;。 使用内置函数&lt;strong&gt;requireNotNull&lt;/strong&gt;或&lt;strong&gt;checkNotNull&lt;/strong&gt;与随附的异常消息以便于调试。&lt;/p&gt;
+
+&lt;p&gt;例如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;uploadPhoto(intent.getStringExtra(&quot;PHOTO_URL&quot;)!!)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;等同如：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;uploadPhoto(requireNotNull(intent.getStringExtra(&quot;PHOTO_URL&quot;), { &quot;Activity parameter 'PHOTO_URL' is missing&quot; }))
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&quot;结论&quot;&gt;结论&lt;/h1&gt;
+
+&lt;p&gt;如果你按照这6个提示，你可以删除所有&lt;code class=&quot;highlighter-rouge&quot;&gt;!!&lt;/code&gt;来自你的Kotlin代码。您的代码将更安全，更可调试，更清洁。如果您了解更多关于如何处理无效安全的方法，请在评论中告诉我们。&lt;/p&gt;
+</description>
+        <pubDate>Tue, 22 May 2018 08:30:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/05/%E8%AF%91-Kotlin%E4%B8%AD%E7%A7%BB%E9%99%A4%E6%89%80%E6%9C%89!!/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/05/%E8%AF%91-Kotlin%E4%B8%AD%E7%A7%BB%E9%99%A4%E6%89%80%E6%9C%89!!/</guid>
+        
+        <category>Android</category>
+        
+        <category>Kotlin</category>
+        
+        
+      </item>
+    
+      <item>
+        <title>使用 Kotlin 进行 Android 开发</title>
+        <description>&lt;p&gt;[TOC]&lt;/p&gt;
+
+&lt;h1 id=&quot;kotlin&quot;&gt;Kotlin&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;Kotlin&lt;/strong&gt;是一种在Java虚拟机上运行的静态类型编程语言，它也可以被编译成为JavaScript源代码。它主要是由俄罗斯圣彼得堡的JetBrains开发团队所发展出来的编程语言，其名称来自于圣彼得堡附近的科特林岛。2012年1月，著名期刊《Dr. Dobb’s Journal》中Kotlin被认定为该月的最佳语言。虽然与Java语法并不兼容，但Kotlin被设计成可以和Java代码相互运作，并可以重复使用如Java集合框架等的现有Java类库。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;摘自 &lt;a href=&quot;https://zh.wikipedia.org/wiki/Kotlin&quot;&gt;Kotlin维基百科&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;历史&quot;&gt;历史&lt;/h1&gt;
+
+&lt;p&gt;2011年7月，JetBrains推出Kotlin项目，这是一个面向JVM的新语言，它已被开发一年之久。JetBrains负责人Dmitry Jemerov说，大多数语言没有他们正在寻找的特性，Scala除外。但是，他指出了Scala的编译时间慢这一明显缺陷。Kotlin的既定目标之一是像Java一样快速编译。2012年2月，JetBrains以Apache 2许可证开源此项目。&lt;/p&gt;
+
+&lt;p&gt;Jetbrains希望这个新语言能够推动IntelliJ IDEA的销售。&lt;/p&gt;
+
+&lt;p&gt;Kotlin v1.0于2016年2月15日发布。这被认为是第一个官方稳定版本，并且JetBrains已准备从该版本开始的长期向后兼容性。&lt;/p&gt;
+
+&lt;p&gt;在Google I/O 2017中，Google宣布在Android上为Kotlin提供最佳支持。&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;摘自 &lt;a href=&quot;https://zh.wikipedia.org/wiki/Kotlin&quot;&gt;Kotlin维基百科&lt;/a&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;使用-kotlin-进行-android-开发&quot;&gt;使用 Kotlin 进行 Android 开发&lt;/h1&gt;
+
+&lt;p&gt;Kotlin 非常适合开发 Android 应用程序，将现代语言的所有优势带入 Android 平台而不会引入任何新的限制：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;strong&gt;兼容性&lt;/strong&gt;：Kotlin 与 JDK 6 完全兼容，保障了 Kotlin 应用程序可以在较旧的 Android 设备上运行而无任何问题。Kotlin 工具在 Android Studio 中会完全支持，并且兼容 Android 构建系统。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;性能&lt;/strong&gt;：由于非常相似的字节码结构，Kotlin 应用程序的运行速度与 Java 类似。 随着 Kotlin 对内联函数的支持，使用 lambda 表达式的代码通常比用 Java 写的代码运行得更快。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;互操作性&lt;/strong&gt;：Kotlin 可与 Java 进行 100％ 的互操作，允许在 Kotlin 应用程序中使用所有现有的 Android 库 。这包括注解处理，所以数据绑定和 Dagger 也是一样。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;占用&lt;/strong&gt;：Kotlin 具有非常紧凑的运行时库，可以通过使用 ProGuard 进一步减少。 在实际应用程序中，Kotlin 运行时只增加几百个方法以及 .apk 文件不到 100K 大小。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;编译时长&lt;/strong&gt;：Kotlin 支持高效的增量编译，所以对于清理构建会有额外的开销，增量构建通常与 Java 一样快或者更快。&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;学习曲线&lt;/strong&gt;：对于 Java 开发人员，Kotlin 入门很容易。包含在 Kotlin 插件中的自动 Java 到 Kotlin 的转换器有助于迈出第一步。Kotlin 心印通过一系列互动练习提供了语言主要功能的指南。&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h1 id=&quot;语法&quot;&gt;语法&lt;/h1&gt;
+
+&lt;h2 id=&quot;定义包&quot;&gt;定义包&lt;/h2&gt;
+
+&lt;p&gt;包的声明应处于源文件顶部：&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;package my.demo
+
+import java.util.*
+
+// ……
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;函数&quot;&gt;函数&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;// 带有两个 Int 参数、返回 Int 的函数
+fun sum(a: Int, b: Int): Int {
+    return a + b
+}
+
+// 将表达式作为函数体、返回值类型自动推断的函数
+fun sum(a: Int, b: Int) = a + b
+
+// 函数返回无意义的值
+fun printSum(a: Int, b: Int): Unit {
+    println(&quot;sum of $a and $b is ${a + b}&quot;)
+}
+
+// Unit 返回类型可以省略
+fun printSum(a: Int, b: Int) {
+    println(&quot;sum of $a and $b is ${a + b}&quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;变量&quot;&gt;变量&lt;/h2&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c1&quot;&gt;// 使用 val 关键字定义的为常量
+&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;  &lt;span class=&quot;c1&quot;&gt;// 立即赋值
+&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;b&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;   	&lt;span class=&quot;c1&quot;&gt;// 自动推断出'Int'类型
+&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;c&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;  	&lt;span class=&quot;c1&quot;&gt;// 如果没有初始值类型不能省略
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;       	&lt;span class=&quot;c1&quot;&gt;// 明确赋值
+&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 使用 var 关键字定义的为变量
+&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;5&lt;/span&gt;		&lt;span class=&quot;c1&quot;&gt;// 定义一个'Int'类型值为5
+&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;c&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;3&lt;/span&gt;			&lt;span class=&quot;c1&quot;&gt;// 可修改值为3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;注释&quot;&gt;注释&lt;/h2&gt;
+
+&lt;p&gt;正如 Java 和 JavaScript，Kotlin 支持行注释及块注释&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;// 这是一个行注释&lt;/p&gt;
+
+  &lt;p&gt;/* 这是一个多行的块注释。 */&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;与 Java 不同的是，Kotlin 的块注释可以嵌套。&lt;/p&gt;
+
+&lt;h2 id=&quot;使用字符串模板&quot;&gt;使用字符串模板&lt;/h2&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;var&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;1&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 模板中的简单名称：
+&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;s1&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;a is $a&quot;&lt;/span&gt; 
+
+&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;m&quot;&gt;2&lt;/span&gt;
+&lt;span class=&quot;c1&quot;&gt;// 模板中的任意表达式：
+&lt;/span&gt;&lt;span class=&quot;kd&quot;&gt;val&lt;/span&gt; &lt;span class=&quot;py&quot;&gt;s2&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s&quot;&gt;&quot;${s1.replace(&quot;&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;is&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;, &quot;&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;was&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;)}, but now is $a&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;使用条件表达式&quot;&gt;使用条件表达式&lt;/h2&gt;
+
+&lt;div class=&quot;language-kotlin highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;maxOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;):&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+    &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;{&lt;/span&gt;
+        &lt;span class=&quot;k&quot;&gt;return&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+    &lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;p&quot;&gt;}&lt;/span&gt;
+
+&lt;span class=&quot;c1&quot;&gt;// 等同于
+&lt;/span&gt;&lt;span class=&quot;k&quot;&gt;fun&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;maxOf&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;,&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;Int&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;p&quot;&gt;&amp;gt;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;&lt;span class=&quot;p&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;a&lt;/span&gt; &lt;span class=&quot;k&quot;&gt;else&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;b&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h2 id=&quot;使用可空值及null检测&quot;&gt;使用可空值及&lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;检测&lt;/h2&gt;
+
+&lt;p&gt;当某个变量的值可以为 &lt;em&gt;null&lt;/em&gt; 的时候，必须在声明处的类型后添加 &lt;code class=&quot;highlighter-rouge&quot;&gt;?&lt;/code&gt; 来标识该引用可为空。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;// 变量空值检测，这样在使用的时候就必须要判断是否为空
+private var a: String? = null
+
+// 如果有一些变量局部设置，在onCreat()中初始化
+private lateinit var b: String
+
+// 如果 str 的内容不是数字返回 null
+fun parseInt(str: String): Int? {
+    // ……
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;使用类型检测及自动类型转换&quot;&gt;使用类型检测及自动类型转换&lt;/h2&gt;
+
+&lt;p&gt;&lt;em&gt;is&lt;/em&gt; 运算符检测一个表达式是否某类型的一个实例。&lt;/p&gt;
+
+&lt;p&gt;如果一个不可变的局部变量或属性已经判断出为某类型，那么检测后的分支中可以直接当作该类型使用，无需显式转换。&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;fun getStringLength(obj: Any): Int? {
+    if (obj is String) {
+        // 'obj'在该条件分支内自动转换成'String'
+        return obj.length
+    }
+    // 在离开类型检测分支后，'obj'仍然是'Any'类型
+    return null
+}
+
+// 或者
+fun getStringLength(obj: Any): Int? {
+    if (obj !is String) return null
+    // 'obj'在这一分支自动转换为'String'
+    return obj.length
+}
+
+// 甚至
+fun getStringLength(obj: Any): Int? {
+    // 'obj'在 '&amp;amp;&amp;amp;' 右边自动转换成'String'类型
+    if (obj is String &amp;amp;&amp;amp; obj.length &amp;gt; 0) {
+        return obj.length
+    }
+    return null
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;使用-for-循环&quot;&gt;使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;for&lt;/code&gt; 循环&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;val items = listOf(&quot;apple&quot;, &quot;banana&quot;, &quot;kiwifruit&quot;)
+for (item in items) {
+    println(item)
+}
+
+// 或者
+val items = listOf(&quot;apple&quot;, &quot;banana&quot;, &quot;kiwifruit&quot;)
+for (index in items.indices) {
+    println(&quot;item at $index is ${items[index]}&quot;)
+}
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;使用-when-表达式&quot;&gt;使用 &lt;code class=&quot;highlighter-rouge&quot;&gt;when&lt;/code&gt; 表达式&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;fun describe(obj: Any): String =
+when (obj) {
+    1          -&amp;gt; &quot;One&quot;
+    &quot;Hello&quot;    -&amp;gt; &quot;Greeting&quot;
+    is Long    -&amp;gt; &quot;Long&quot;
+    !is String -&amp;gt; &quot;Not a string&quot;
+    else       -&amp;gt; &quot;Unknown&quot;
+}
+
+/* result输出：
+item at 0 is apple
+item at 1 is banana
+item at 2 is kiwifruit
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;使用区间range&quot;&gt;使用区间&lt;code class=&quot;highlighter-rouge&quot;&gt;range&lt;/code&gt;&lt;/h2&gt;
+
+&lt;p&gt;使用 &lt;em&gt;in&lt;/em&gt; 运算符来检测某个数字是否在指定区间内&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;val x = 10
+val y = 9
+if (x in 1..y+1) {
+    println(&quot;fits in range&quot;)
+}
+
+// result输出：
+// fits in range
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;如果想检测某个数字是否在指定区间外：可在&lt;code class=&quot;highlighter-rouge&quot;&gt;in&lt;/code&gt;前面加上&lt;code class=&quot;highlighter-rouge&quot;&gt;!&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;使用集合&quot;&gt;使用集合&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;// 对集合进行迭代
+val items = listOf(&quot;apple&quot;, &quot;banana&quot;, &quot;kiwifruit&quot;)
+for (item in items) {
+    println(item)
+}
+/* 输出：
+apple
+banana
+kiwifruit
+*/
+
+// 使用 in 运算符来判断集合内是否包含某实例
+val items = listOf(&quot;apple&quot;, &quot;banana&quot;, &quot;kiwifruit&quot;)
+when {
+    &quot;orange&quot; in items -&amp;gt; println(&quot;juicy&quot;)
+    &quot;apple&quot; in items -&amp;gt; println(&quot;apple is fine too&quot;)
+}
+/* 输出：
+apple is fine too
+*/
+
+// 使用 lambda 表达式来过滤（filter）和映射（map）集合
+val fruits = listOf(&quot;banana&quot;, &quot;avocado&quot;, &quot;apple&quot;, &quot;kiwifruit&quot;)
+items
+.filter { it.startsWith(&quot;a&quot;) }
+.sortedBy { it }
+.map { it.toUpperCase() }
+.forEach { println(it) }
+/* 输出：
+APPLE
+AVOCADO
+*/
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;创建基本类及其实例&quot;&gt;创建基本类及其实例&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;val rectangle = Rectangle(5.0, 2.0) // 不需要“new”关键字
+val triangle = Triangle(3.0, 4.0, 5.0)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h2 id=&quot;创建-dtos&quot;&gt;创建 &lt;code class=&quot;highlighter-rouge&quot;&gt;DTOs&lt;/code&gt;&lt;/h2&gt;
+
+&lt;pre&gt;&lt;code class=&quot;language-Kotlin&quot;&gt;data class Customer(val name: String, val email: String)
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;会为 &lt;code class=&quot;highlighter-rouge&quot;&gt;Customer&lt;/code&gt; 类提供以下功能：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;所有属性的 &lt;code class=&quot;highlighter-rouge&quot;&gt;getters&lt;/code&gt; （对于 &lt;em&gt;var&lt;/em&gt; 定义的还有 setters）&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;equals()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;hashCode()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;toString()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;copy()&lt;/code&gt;&lt;/li&gt;
+  &lt;li&gt;所有属性的 &lt;code class=&quot;highlighter-rouge&quot;&gt;component1()&lt;/code&gt;、 &lt;code class=&quot;highlighter-rouge&quot;&gt;component2()&lt;/code&gt;……等等&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 11 May 2018 07:30:00 +0800</pubDate>
+        <link>http://localhost:4000/2018/05/%E4%BD%BF%E7%94%A8-Kotlin-%E8%BF%9B%E8%A1%8C-Android-%E5%BC%80%E5%8F%91/</link>
+        <guid isPermaLink="true">http://localhost:4000/2018/05/%E4%BD%BF%E7%94%A8-Kotlin-%E8%BF%9B%E8%A1%8C-Android-%E5%BC%80%E5%8F%91/</guid>
+        
+        <category>Android</category>
+        
+        <category>Kotlin</category>
+        
+        
+      </item>
     
       <item>
         <title>Android 框架模式MVC的使用</title>
@@ -44,7 +503,7 @@
 
 &lt;h3 id=&quot;mvc模型图&quot;&gt;MVC模型图&lt;/h3&gt;
 
-&lt;p&gt;![1611520413724&lt;em&gt;.pic](/Users/wangzheng/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/64b9182e40f99f0b4837f8899be59734/Message/MessageTemp/2b5a123eb7769d0768a2e22d37c20880/Image/1611520413724&lt;/em&gt;.pic.jpg)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://p8i9mda7f.bkt.clouddn.com/18-5-10/30205173.jpg&quot; alt=&quot;MVC模型图.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;h3 id=&quot;mvc-for-android&quot;&gt;MVC for Android&lt;/h3&gt;
 
@@ -58,7 +517,7 @@
 
 &lt;p&gt;接下来我们通过一个小项目来解读MVC在Android中的使用。先上一个界面图：&lt;/p&gt;
 
-&lt;p&gt;![1631520413854&lt;em&gt;.pic](/Users/wangzheng/Library/Containers/com.tencent.xinWeChat/Data/Library/Application Support/com.tencent.xinWeChat/2.0b4.0.9/64b9182e40f99f0b4837f8899be59734/Message/MessageTemp/2b5a123eb7769d0768a2e22d37c20880/Image/1631520413854&lt;/em&gt;.pic.jpg)&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;http://p8i9mda7f.bkt.clouddn.com/18-5-10/59822984.jpg&quot; alt=&quot;result.jpg&quot; /&gt;&lt;/p&gt;
 
 &lt;h4 id=&quot;controller控制器&quot;&gt;Controller控制器&lt;/h4&gt;
 

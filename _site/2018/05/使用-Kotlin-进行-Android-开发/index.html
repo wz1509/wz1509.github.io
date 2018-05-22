@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>使用 Kotlin 进行 Android 开发</title>
+  <meta name="description" content="[TOC]">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用 Kotlin 进行 Android 开发">
+  <meta name="twitter:description" content="[TOC]">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="使用 Kotlin 进行 Android 开发">
+  <meta property="og:description" content="[TOC]">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/05/%E4%BD%BF%E7%94%A8-Kotlin-%E8%BF%9B%E8%A1%8C-Android-%E5%BC%80%E5%8F%91/">
+  <link rel="alternate" type="application/rss+xml" title="Wazing" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Wazing 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Wazing logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Wazing" class="blog-button">Wazing</a></h1>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">无醇酒美人，不愿来此人间，无快剑挚友，不愿老此江湖。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/wz1509" title="@wz1509 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:727417703@qq.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-disabled"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-05-11 08:30:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-05-11</time> &#8226; <span class="post-meta__tags tags">Android Kotlin</span>
+    </div>
+    <h1 class="post-title">使用 Kotlin 进行 Android 开发</h1>
+  </header>
+
+  <section class="post">
+    <p>[TOC]</p>
+
+<h1 id="kotlin">Kotlin</h1>
+
+<p><strong>Kotlin</strong>是一种在Java虚拟机上运行的静态类型编程语言，它也可以被编译成为JavaScript源代码。它主要是由俄罗斯圣彼得堡的JetBrains开发团队所发展出来的编程语言，其名称来自于圣彼得堡附近的科特林岛。2012年1月，著名期刊《Dr. Dobb’s Journal》中Kotlin被认定为该月的最佳语言。虽然与Java语法并不兼容，但Kotlin被设计成可以和Java代码相互运作，并可以重复使用如Java集合框架等的现有Java类库。</p>
+
+<blockquote>
+  <p>摘自 <a href="https://zh.wikipedia.org/wiki/Kotlin">Kotlin维基百科</a></p>
+</blockquote>
+
+<h1 id="历史">历史</h1>
+
+<p>2011年7月，JetBrains推出Kotlin项目，这是一个面向JVM的新语言，它已被开发一年之久。JetBrains负责人Dmitry Jemerov说，大多数语言没有他们正在寻找的特性，Scala除外。但是，他指出了Scala的编译时间慢这一明显缺陷。Kotlin的既定目标之一是像Java一样快速编译。2012年2月，JetBrains以Apache 2许可证开源此项目。</p>
+
+<p>Jetbrains希望这个新语言能够推动IntelliJ IDEA的销售。</p>
+
+<p>Kotlin v1.0于2016年2月15日发布。这被认为是第一个官方稳定版本，并且JetBrains已准备从该版本开始的长期向后兼容性。</p>
+
+<p>在Google I/O 2017中，Google宣布在Android上为Kotlin提供最佳支持。</p>
+
+<blockquote>
+  <p>摘自 <a href="https://zh.wikipedia.org/wiki/Kotlin">Kotlin维基百科</a></p>
+</blockquote>
+
+<h1 id="使用-kotlin-进行-android-开发">使用 Kotlin 进行 Android 开发</h1>
+
+<p>Kotlin 非常适合开发 Android 应用程序，将现代语言的所有优势带入 Android 平台而不会引入任何新的限制：</p>
+
+<ul>
+  <li><strong>兼容性</strong>：Kotlin 与 JDK 6 完全兼容，保障了 Kotlin 应用程序可以在较旧的 Android 设备上运行而无任何问题。Kotlin 工具在 Android Studio 中会完全支持，并且兼容 Android 构建系统。</li>
+  <li><strong>性能</strong>：由于非常相似的字节码结构，Kotlin 应用程序的运行速度与 Java 类似。 随着 Kotlin 对内联函数的支持，使用 lambda 表达式的代码通常比用 Java 写的代码运行得更快。</li>
+  <li><strong>互操作性</strong>：Kotlin 可与 Java 进行 100％ 的互操作，允许在 Kotlin 应用程序中使用所有现有的 Android 库 。这包括注解处理，所以数据绑定和 Dagger 也是一样。</li>
+  <li><strong>占用</strong>：Kotlin 具有非常紧凑的运行时库，可以通过使用 ProGuard 进一步减少。 在实际应用程序中，Kotlin 运行时只增加几百个方法以及 .apk 文件不到 100K 大小。</li>
+  <li><strong>编译时长</strong>：Kotlin 支持高效的增量编译，所以对于清理构建会有额外的开销，增量构建通常与 Java 一样快或者更快。</li>
+  <li><strong>学习曲线</strong>：对于 Java 开发人员，Kotlin 入门很容易。包含在 Kotlin 插件中的自动 Java 到 Kotlin 的转换器有助于迈出第一步。Kotlin 心印通过一系列互动练习提供了语言主要功能的指南。</li>
+</ul>
+
+<h1 id="语法">语法</h1>
+
+<h2 id="定义包">定义包</h2>
+
+<p>包的声明应处于源文件顶部：</p>
+
+<pre><code class="language-Kotlin">package my.demo
+
+import java.util.*
+
+// ……
+</code></pre>
+
+<h2 id="函数">函数</h2>
+
+<pre><code class="language-Kotlin">// 带有两个 Int 参数、返回 Int 的函数
+fun sum(a: Int, b: Int): Int {
+    return a + b
+}
+
+// 将表达式作为函数体、返回值类型自动推断的函数
+fun sum(a: Int, b: Int) = a + b
+
+// 函数返回无意义的值
+fun printSum(a: Int, b: Int): Unit {
+    println("sum of $a and $b is ${a + b}")
+}
+
+// Unit 返回类型可以省略
+fun printSum(a: Int, b: Int) {
+    println("sum of $a and $b is ${a + b}")
+}
+</code></pre>
+
+<h2 id="变量">变量</h2>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="c1">// 使用 val 关键字定义的为常量
+</span><span class="kd">val</span> <span class="py">a</span><span class="p">:</span> <span class="n">Int</span> <span class="p">=</span> <span class="m">1</span>  <span class="c1">// 立即赋值
+</span><span class="kd">val</span> <span class="py">b</span> <span class="p">=</span> <span class="m">2</span>   	<span class="c1">// 自动推断出'Int'类型
+</span><span class="kd">val</span> <span class="py">c</span><span class="p">:</span> <span class="n">Int</span>  	<span class="c1">// 如果没有初始值类型不能省略
+</span><span class="n">c</span> <span class="p">=</span> <span class="m">3</span>       	<span class="c1">// 明确赋值
+</span>
+<span class="c1">// 使用 var 关键字定义的为变量
+</span><span class="kd">var</span> <span class="py">c</span> <span class="p">=</span> <span class="m">5</span>		<span class="c1">// 定义一个'Int'类型值为5
+</span><span class="n">c</span> <span class="p">=</span> <span class="m">3</span>			<span class="c1">// 可修改值为3
+</span></code></pre>
+</div>
+
+<h2 id="注释">注释</h2>
+
+<p>正如 Java 和 JavaScript，Kotlin 支持行注释及块注释</p>
+
+<blockquote>
+  <p>// 这是一个行注释</p>
+
+  <p>/* 这是一个多行的块注释。 */</p>
+</blockquote>
+
+<p>与 Java 不同的是，Kotlin 的块注释可以嵌套。</p>
+
+<h2 id="使用字符串模板">使用字符串模板</h2>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="py">a</span> <span class="p">=</span> <span class="m">1</span>
+<span class="c1">// 模板中的简单名称：
+</span><span class="kd">val</span> <span class="py">s1</span> <span class="p">=</span> <span class="s">"a is $a"</span> 
+
+<span class="n">a</span> <span class="p">=</span> <span class="m">2</span>
+<span class="c1">// 模板中的任意表达式：
+</span><span class="kd">val</span> <span class="py">s2</span> <span class="p">=</span> <span class="s">"${s1.replace("</span><span class="k">is</span><span class="s">", "</span><span class="n">was</span><span class="s">")}, but now is $a"</span>
+</code></pre>
+</div>
+
+<h2 id="使用条件表达式">使用条件表达式</h2>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">maxOf</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Int</span><span class="p">):</span> <span class="n">Int</span> <span class="p">{</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="p">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">a</span>
+    <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">b</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// 等同于
+</span><span class="k">fun</span> <span class="nf">maxOf</span><span class="p">(</span><span class="n">a</span><span class="p">:</span> <span class="n">Int</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="p">=</span> <span class="k">if</span> <span class="p">(</span><span class="n">a</span> <span class="p">&gt;</span> <span class="n">b</span><span class="p">)</span> <span class="n">a</span> <span class="k">else</span> <span class="n">b</span>
+</code></pre>
+</div>
+
+<h2 id="使用可空值及null检测">使用可空值及<code class="highlighter-rouge">null</code>检测</h2>
+
+<p>当某个变量的值可以为 <em>null</em> 的时候，必须在声明处的类型后添加 <code class="highlighter-rouge">?</code> 来标识该引用可为空。</p>
+
+<pre><code class="language-Kotlin">// 变量空值检测，这样在使用的时候就必须要判断是否为空
+private var a: String? = null
+
+// 如果有一些变量局部设置，在onCreat()中初始化
+private lateinit var b: String
+
+// 如果 str 的内容不是数字返回 null
+fun parseInt(str: String): Int? {
+    // ……
+}
+</code></pre>
+
+<h2 id="使用类型检测及自动类型转换">使用类型检测及自动类型转换</h2>
+
+<p><em>is</em> 运算符检测一个表达式是否某类型的一个实例。</p>
+
+<p>如果一个不可变的局部变量或属性已经判断出为某类型，那么检测后的分支中可以直接当作该类型使用，无需显式转换。</p>
+
+<pre><code class="language-Kotlin">fun getStringLength(obj: Any): Int? {
+    if (obj is String) {
+        // 'obj'在该条件分支内自动转换成'String'
+        return obj.length
+    }
+    // 在离开类型检测分支后，'obj'仍然是'Any'类型
+    return null
+}
+
+// 或者
+fun getStringLength(obj: Any): Int? {
+    if (obj !is String) return null
+    // 'obj'在这一分支自动转换为'String'
+    return obj.length
+}
+
+// 甚至
+fun getStringLength(obj: Any): Int? {
+    // 'obj'在 '&amp;&amp;' 右边自动转换成'String'类型
+    if (obj is String &amp;&amp; obj.length &gt; 0) {
+        return obj.length
+    }
+    return null
+}
+</code></pre>
+
+<h2 id="使用-for-循环">使用 <code class="highlighter-rouge">for</code> 循环</h2>
+
+<pre><code class="language-Kotlin">val items = listOf("apple", "banana", "kiwifruit")
+for (item in items) {
+    println(item)
+}
+
+// 或者
+val items = listOf("apple", "banana", "kiwifruit")
+for (index in items.indices) {
+    println("item at $index is ${items[index]}")
+}
+</code></pre>
+
+<h2 id="使用-when-表达式">使用 <code class="highlighter-rouge">when</code> 表达式</h2>
+
+<pre><code class="language-Kotlin">fun describe(obj: Any): String =
+when (obj) {
+    1          -&gt; "One"
+    "Hello"    -&gt; "Greeting"
+    is Long    -&gt; "Long"
+    !is String -&gt; "Not a string"
+    else       -&gt; "Unknown"
+}
+
+/* result输出：
+item at 0 is apple
+item at 1 is banana
+item at 2 is kiwifruit
+*/
+</code></pre>
+
+<h2 id="使用区间range">使用区间<code class="highlighter-rouge">range</code></h2>
+
+<p>使用 <em>in</em> 运算符来检测某个数字是否在指定区间内</p>
+
+<pre><code class="language-Kotlin">val x = 10
+val y = 9
+if (x in 1..y+1) {
+    println("fits in range")
+}
+
+// result输出：
+// fits in range
+</code></pre>
+
+<blockquote>
+  <p>如果想检测某个数字是否在指定区间外：可在<code class="highlighter-rouge">in</code>前面加上<code class="highlighter-rouge">!</code></p>
+</blockquote>
+
+<h2 id="使用集合">使用集合</h2>
+
+<pre><code class="language-Kotlin">// 对集合进行迭代
+val items = listOf("apple", "banana", "kiwifruit")
+for (item in items) {
+    println(item)
+}
+/* 输出：
+apple
+banana
+kiwifruit
+*/
+
+// 使用 in 运算符来判断集合内是否包含某实例
+val items = listOf("apple", "banana", "kiwifruit")
+when {
+    "orange" in items -&gt; println("juicy")
+    "apple" in items -&gt; println("apple is fine too")
+}
+/* 输出：
+apple is fine too
+*/
+
+// 使用 lambda 表达式来过滤（filter）和映射（map）集合
+val fruits = listOf("banana", "avocado", "apple", "kiwifruit")
+items
+.filter { it.startsWith("a") }
+.sortedBy { it }
+.map { it.toUpperCase() }
+.forEach { println(it) }
+/* 输出：
+APPLE
+AVOCADO
+*/
+</code></pre>
+
+<h2 id="创建基本类及其实例">创建基本类及其实例</h2>
+
+<pre><code class="language-Kotlin">val rectangle = Rectangle(5.0, 2.0) // 不需要“new”关键字
+val triangle = Triangle(3.0, 4.0, 5.0)
+</code></pre>
+
+<h2 id="创建-dtos">创建 <code class="highlighter-rouge">DTOs</code></h2>
+
+<pre><code class="language-Kotlin">data class Customer(val name: String, val email: String)
+</code></pre>
+
+<p>会为 <code class="highlighter-rouge">Customer</code> 类提供以下功能：</p>
+
+<ul>
+  <li>所有属性的 <code class="highlighter-rouge">getters</code> （对于 <em>var</em> 定义的还有 setters）</li>
+  <li><code class="highlighter-rouge">equals()</code></li>
+  <li><code class="highlighter-rouge">hashCode()</code></li>
+  <li><code class="highlighter-rouge">toString()</code></li>
+  <li><code class="highlighter-rouge">copy()</code></li>
+  <li>所有属性的 <code class="highlighter-rouge">component1()</code>、 <code class="highlighter-rouge">component2()</code>……等等</li>
+</ul>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/05/%E8%AF%91-Kotlin%E4%B8%AD%E7%A7%BB%E9%99%A4%E6%89%80%E6%9C%89!!/" title="link to 如何移除你的Kotlin代码中所有!!">如何移除你的Kotlin代码中所有!!</a></h2>
+       <p class="excerpt">[TOC]原标题：How to remove all !! from your Kotlin code原文地址：https://android.jlelse.eu/how-to-remove-all-from-your-kotlin-code-87dc2c9767fb原文作者：David Vávra作者本篇源码地址：https://gist.github.com/davidvavra如何移除你的Kotlin代码中所有!!空安全特性是Kotlin语言最好语法特性之一。它让你在语言层面来考虑可...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-05-22 09:30:00 +0900" class="post-list__meta--date date">2018-05-22</time> &#8226; <span class="post-list__meta--tags tags">Android Kotlin</span><a class="btn-border-small" href=/2018/05/%E8%AF%91-Kotlin%E4%B8%AD%E7%A7%BB%E9%99%A4%E6%89%80%E6%9C%89!!/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/03/Android-%E6%A1%86%E6%9E%B6%E6%A8%A1%E5%BC%8FMVC%E7%9A%84%E4%BD%BF%E7%94%A8/" title="link to Android 框架模式MVC的使用">Android 框架模式MVC的使用</a></h2>
+       <p class="excerpt">[TOC]MVC概念​	MVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用一种业务逻辑、数据、界面显示分离的方法组织代码，将业务逻辑聚集到一个部件里面，在改进和个性化定制界面及用户交互的同时，不需要重新编写业务逻辑。MVC被独特的发展起来用于映射传统的输入、处理和输出功能在一个逻辑的图形化用户界面的结构中。MVC编程模式MVC 是一种使用 MVC（Model View Controlle...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-03-07 15:32:24 +0900" class="post-list__meta--date date">2018-03-07</time> &#8226; <span class="post-list__meta--tags tags">Android 开发模式</span><a class="btn-border-small" href=/2018/03/Android-%E6%A1%86%E6%9E%B6%E6%A8%A1%E5%BC%8FMVC%E7%9A%84%E4%BD%BF%E7%94%A8/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-05-22 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

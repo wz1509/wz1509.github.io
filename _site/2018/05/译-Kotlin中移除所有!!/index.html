@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>如何移除你的Kotlin代码中所有!!</title>
+  <meta name="description" content="[TOC]">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="如何移除你的Kotlin代码中所有!!">
+  <meta name="twitter:description" content="[TOC]">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="如何移除你的Kotlin代码中所有!!">
+  <meta property="og:description" content="[TOC]">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/05/%E8%AF%91-Kotlin%E4%B8%AD%E7%A7%BB%E9%99%A4%E6%89%80%E6%9C%89!!/">
+  <link rel="alternate" type="application/rss+xml" title="Wazing" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Wazing 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Wazing logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Wazing" class="blog-button">Wazing</a></h1>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">无醇酒美人，不愿来此人间，无快剑挚友，不愿老此江湖。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/wz1509" title="@wz1509 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:727417703@qq.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-disabled"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-05-22 09:30:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-05-22</time> &#8226; <span class="post-meta__tags tags">Android Kotlin</span>
+    </div>
+    <h1 class="post-title">如何移除你的Kotlin代码中所有!!</h1>
+  </header>
+
+  <section class="post">
+    <p>[TOC]</p>
+
+<p>原标题：<strong>How to remove all !! from your Kotlin code</strong></p>
+
+<p>原文地址：<a href="https://android.jlelse.eu/how-to-remove-all-from-your-kotlin-code-87dc2c9767fb">https://android.jlelse.eu/how-to-remove-all-from-your-kotlin-code-87dc2c9767fb</a></p>
+
+<p>原文作者：<a href="https://android.jlelse.eu/@david.vavra?source=post_header_lockup">David Vávra</a></p>
+
+<p>作者本篇源码地址：<a href="https://gist.github.com/davidvavra">https://gist.github.com/davidvavra</a></p>
+
+<h1 id="如何移除你的kotlin代码中所有">如何移除你的Kotlin代码中所有<code class="highlighter-rouge">!!</code></h1>
+
+<p>空安全特性是<a href="https://kotlinlang.org/">Kotlin</a>语言最好语法特性之一。它让你在语言层面来考虑可空性，以致于你可以避免很多在Java中常见的隐藏空指针异常。然而当你通过工具自动将Java代码转化成Kotlin时，你会发现有很多的 <code class="highlighter-rouge">!!</code> 标记出现。按道理在你的代码中不应该有任何的 <code class="highlighter-rouge">!!</code> 出现，除非它是一个快速原型。并且我相信这是对的，因为 <code class="highlighter-rouge">!!</code> 的出现基本上的意味着 “你这里有可能存在未处理的 <code class="highlighter-rouge">KotlinNullPointerException</code>.</p>
+
+<p>Kotlin有一些智能的机制去避免这些空指针的问题，但是弄明白它并不是那么直接和容易。这里有6种方法去做到这一点：</p>
+
+<h2 id="1使用val而不是var">1）使用<code class="highlighter-rouge">val</code>而不是<code class="highlighter-rouge">var</code></h2>
+
+<p><strong>Kotlin</strong>让你在语言层面思考不变性，这点看起来很不错。 <code class="highlighter-rouge">val</code>是只读的，<code class="highlighter-rouge">var</code>是可变的。 建议尽可能多地使用只读属性。 它们是线程安全的，并且在函数式编程方面效果很好。 如果你使用它们作为不可变项，你不必关心可空性。 只要注意<code class="highlighter-rouge">val</code>可以实际上是可变的。</p>
+
+<h2 id="2使用lateinit">2）使用<code class="highlighter-rouge">lateinit</code></h2>
+
+<p>有时你不能使用不可变属性。例如，它发生在Android上，当一些属性在<strong>onCreate()</strong>调用中被初始化时。对于这些情况，<strong>Kotlin</strong>具有称为<code class="highlighter-rouge">lateinit</code>的语言功能。</p>
+
+<p>它可以让你取代这个：</p>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="k">private</span> <span class="kd">var</span> <span class="py">mAdapter</span><span class="p">:</span> <span class="n">RecyclerAdapter</span><span class="p">&lt;</span><span class="n">Transaction</span><span class="p">&gt;?</span> <span class="p">=</span> <span class="k">null</span>
+
+<span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+   <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+   <span class="n">mAdapter</span> <span class="p">=</span> <span class="n">RecyclerAdapter</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">item_transaction</span><span class="p">)</span>
+<span class="p">}</span>
+
+<span class="k">fun</span> <span class="nf">updateTransactions</span><span class="p">()</span> <span class="p">{</span>
+   <span class="n">mAdapter</span><span class="o">!!</span><span class="p">.</span><span class="n">notifyDataSetChanged</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>等同这个：</p>
+
+<pre><code class="language-Kotlin">private lateinit var mAdapter: RecyclerAdapter&lt;Transaction&gt;
+
+override fun onCreate(savedInstanceState: Bundle?) {
+   super.onCreate(savedInstanceState)
+   mAdapter = RecyclerAdapter(R.layout.item_transaction)
+}
+
+fun updateTransactions() {
+   mAdapter.notifyDataSetChanged()
+}
+</code></pre>
+
+<p>请注意，访问未初始化的<code class="highlighter-rouge">lateinit</code>属性将导致<strong>UninitializedPropertyAccessException</strong>。</p>
+
+<p>遗憾的是<code class="highlighter-rouge">lateinit</code>不适用于原始数据类型，比如像<code class="highlighter-rouge">Int</code>这样的基本数据类型。对于原始类型，您可以使用这样的代理：</p>
+
+<pre><code class="language-Kotlin">private var mNumber: Int by Delegates.notNull&lt;Int&gt;()
+</code></pre>
+
+<h2 id="3-使用let函数">3) 使用<code class="highlighter-rouge">let</code>函数</h2>
+
+<p>这是Kotlin代码中的常见编译时错误：</p>
+
+<p><img src="https://cdn-images-1.medium.com/max/1600/1*qJKE9v8-G1yFh64cRFcjPg.png" alt="img" /></p>
+
+<p>令我恼火的是：我知道这个可变属性在空检查后不能改变。许多开发人员通过以下方式快速修复它：</p>
+
+<pre><code class="language-Kotlin">private var mPhotoUrl: String? = null
+
+fun uploadClicked() {
+    if (mPhotoUrl != null) {
+        uploadPhoto(mPhotoUrl!!)
+    }
+}
+</code></pre>
+
+<p>但是有一个使用<code class="highlighter-rouge">let</code>函数的优雅解决方案：</p>
+
+<pre><code class="language-Kotlin">private var mPhotoUrl: String? = null
+
+fun uploadClicked() {
+    mPhotoUrl?.let { uploadPhoto(it) }
+}
+</code></pre>
+
+<h2 id="4创建全局函数来处理更复杂的案例">4）创建全局函数来处理更复杂的案例</h2>
+
+<p><code class="highlighter-rouge">let</code>是一个简单的空检查的很好的替代品，但可能会有更复杂的情况。例如：</p>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="p">(</span><span class="n">mUserName</span> <span class="p">!=</span> <span class="k">null</span> <span class="p">&amp;&amp;</span> <span class="n">mPhotoUrl</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">uploadPhoto</span><span class="p">(</span><span class="n">mUserName</span><span class="o">!!</span><span class="p">,</span> <span class="n">mPhotoUrl</span><span class="o">!!</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>你可以嵌套两个<code class="highlighter-rouge">let</code>调用，但那不会很好读。在<strong>Kotlin</strong>中，你可以拥有全局可访问的功能，所以你可以轻松地构建你需要的功能，就像这样使用：</p>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="n">ifNotNull</span><span class="p">(</span><span class="n">mUserName</span><span class="p">,</span> <span class="n">mPhotoUrl</span><span class="p">)</span> <span class="p">{</span>
+   <span class="n">userName</span><span class="p">,</span> <span class="n">photoUrl</span> <span class="p">-&gt;</span>
+   <span class="n">uploadPhoto</span><span class="p">(</span><span class="n">userName</span><span class="p">,</span> <span class="n">photoUrl</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>源码为：</p>
+
+<pre><code class="language-Kotlin">fun &lt;T1, T2&gt; ifNotNull(value1: T1?, value2: T2?, bothNotNull: (T1, T2) -&gt; (Unit)) {
+   if (value1 != null &amp;&amp; value2 != null) {
+       bothNotNull(value1, value2)
+   }
+}
+</code></pre>
+
+<h2 id="5使用elvis操作符">5）使用<code class="highlighter-rouge">Elvis</code>操作符</h2>
+
+<p>如果您有空情况下的回退值，则<code class="highlighter-rouge">Elvis</code>运算符非常好。所以你可以取代这个：</p>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="k">fun</span> <span class="nf">getUserName</span><span class="p">():</span> <span class="n">String</span> <span class="p">{</span>
+   <span class="k">if</span> <span class="p">(</span><span class="n">mUserName</span> <span class="p">!=</span> <span class="k">null</span><span class="p">)</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="n">mUserName</span><span class="o">!!</span>
+   <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+       <span class="k">return</span> <span class="s">"Anonymous"</span>
+   <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>等同这个：</p>
+
+<pre><code class="language-Kotlin">fun getUserName(): String {
+   return mUserName ?: "Anonymous"
+}		
+</code></pre>
+
+<h2 id="6按自己的条件崩溃">6）按自己的条件崩溃</h2>
+
+<p>即使类型必须为空，仍然有些情况下您知道某些内容不能为空。 如果它为空，这是代码中的一个bug，你应该知道它。 但是抛弃<code class="highlighter-rouge">!!</code>，系统会给你一个很难debug的<strong>KotlinNullPointerException</strong>。 使用内置函数<strong>requireNotNull</strong>或<strong>checkNotNull</strong>与随附的异常消息以便于调试。</p>
+
+<p>例如：</p>
+
+<pre><code class="language-Kotlin">uploadPhoto(intent.getStringExtra("PHOTO_URL")!!)
+</code></pre>
+
+<p>等同如：</p>
+
+<pre><code class="language-Kotlin">uploadPhoto(requireNotNull(intent.getStringExtra("PHOTO_URL"), { "Activity parameter 'PHOTO_URL' is missing" }))
+</code></pre>
+
+<h1 id="结论">结论</h1>
+
+<p>如果你按照这6个提示，你可以删除所有<code class="highlighter-rouge">!!</code>来自你的Kotlin代码。您的代码将更安全，更可调试，更清洁。如果您了解更多关于如何处理无效安全的方法，请在评论中告诉我们。</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/05/%E4%BD%BF%E7%94%A8-Kotlin-%E8%BF%9B%E8%A1%8C-Android-%E5%BC%80%E5%8F%91/" title="link to 使用 Kotlin 进行 Android 开发">使用 Kotlin 进行 Android 开发</a></h2>
+       <p class="excerpt">[TOC]KotlinKotlin是一种在Java虚拟机上运行的静态类型编程语言，它也可以被编译成为JavaScript源代码。它主要是由俄罗斯圣彼得堡的JetBrains开发团队所发展出来的编程语言，其名称来自于圣彼得堡附近的科特林岛。2012年1月，著名期刊《Dr. Dobb’s Journal》中Kotlin被认定为该月的最佳语言。虽然与Java语法并不兼容，但Kotlin被设计成可以和Java代码相互运作，并可以重复使用如Java集合框架等的现有Java类库。  摘自 Kotlin...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-05-11 08:30:00 +0900" class="post-list__meta--date date">2018-05-11</time> &#8226; <span class="post-list__meta--tags tags">Android Kotlin</span><a class="btn-border-small" href=/2018/05/%E4%BD%BF%E7%94%A8-Kotlin-%E8%BF%9B%E8%A1%8C-Android-%E5%BC%80%E5%8F%91/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-05-22 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
