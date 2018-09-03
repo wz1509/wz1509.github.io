@@ -48,7 +48,7 @@ MVC 分层同时也简化了分组开发。不同的开发人员可同时开发�
 
 接下来我们通过一个小项目来解读MVC在Android中的使用。先上一个界面图：
 
-![result.jpg](http://p8i9mda7f.bkt.clouddn.com/18-5-10/59822984.jpg)
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-5-10/59822984.jpg" width="300"/>
 
 #### Controller控制器
 

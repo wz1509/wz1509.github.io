@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>搭建Flutter开发环境</title>
+  <meta name="description" content="[TOC]">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="搭建Flutter开发环境">
+  <meta name="twitter:description" content="[TOC]">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="搭建Flutter开发环境">
+  <meta property="og:description" content="[TOC]">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/06/%E6%90%AD%E5%BB%BAFlutter%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
+  <link rel="alternate" type="application/rss+xml" title="Wazing" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Wazing 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Wazing logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Wazing" class="blog-button">Wazing</a></h1>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">无醇酒美人，不愿来此人间，无快剑挚友，不愿老此江湖。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/wz1509" title="@wz1509 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:727417703@qq.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-disabled"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-06-14 08:00:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-06-14</time> &#8226; <span class="post-meta__tags tags">Flutter</span>
+    </div>
+    <h1 class="post-title">搭建Flutter开发环境</h1>
+  </header>
+
+  <section class="post">
+    <p>[TOC]</p>
+
+<h1 id="前言">前言</h1>
+<ul>
+  <li>安装环境 macOS</li>
+</ul>
+
+<h1 id="安装">安装</h1>
+
+<h2 id="获取flutter-sdk">获取Flutter SDK</h2>
+
+<p>官网：<a href="https://github.com/flutter/flutter">https://github.com/flutter/flutter</a></p>
+
+<h2 id="克隆到本地">克隆到本地</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> git clone https://github.com/flutter/flutter.git
+</code></pre>
+</div>
+
+<h2 id="设置环境变量">设置环境变量</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code># Flutter
+export PATH=$PATH:~/Library/Android/flutter/bin:$PATH
+
+// 刷新当前终端窗口
+source ~/.bash_profile
+</code></pre>
+</div>
+
+<p>~ 表示用户目录</p>
+
+<p>/Library/Android/flutter/bin 表示刚刚下载的 flutter sdk 文件目录</p>
+
+<p>大概的意思就要指向 flutter/bin 这个目录；</p>
+
+<h2 id="升级flutter">升级Flutter</h2>
+
+<p>终端运行</p>
+
+<h3 id="查看分支">查看分支</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>flutter channel
+</code></pre>
+</div>
+
+<p>大概有三个分支 beta dev master</p>
+
+<ul>
+  <li>beta 稳定版本，建议跟踪到该分支；</li>
+  <li>dev 本地分支？(不太清楚)；</li>
+  <li>
+    <p>master 开发版本，稳定性要低一些；</p>
+
+    <p>flutter channel beta</p>
+  </li>
+</ul>
+
+<h3 id="升级-flutter-channel-和-packages">升级 Flutter channel 和 packages</h3>
+
+<p>要同时更新Flutter SDK和你的依赖包</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>flutter upgrade
+</code></pre>
+</div>
+
+<h3 id="升级你的依赖包">升级你的依赖包</h3>
+
+<p>只想更新应用依赖的包(不包括Flutter SDK)，请使用以下命令：</p>
+
+<ul>
+  <li>
+    <p>flutter packages get获取 pubspec.yaml 文件中列出的所有依赖包</p>
+  </li>
+  <li>
+    <p>flutter packages upgrade 获取 pubspec.yaml 文件中列出的所有依赖包的最新版本</p>
+  </li>
+</ul>
+
+<h2 id="检查安装-flutter-doctor">检查安装 flutter doctor</h2>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>flutter doctor
+</code></pre>
+</div>
+
+<p>该命令检查您的环境并在终端窗口中显示报告。Dart SDK已经在捆绑在Flutter里了，没有必要单独安装Dart。 仔细检查命令行输出以获取可能需要安装的其他软件或进一步需要执行的任务（以粗体显示）</p>
+
+<p>例如:</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[✓] Flutter (Channel beta, v0.3.2, on Mac OS X 10.13.5 17F77, locale zh-Hans-CN)
+[!] Android toolchain - develop for Android devices (Android SDK 27.0.3)
+    ✗ Android license status unknown.
+[!] iOS toolchain - develop for iOS devices (Xcode 9.4.1)
+    ✗ Missing Xcode dependency: Python module "six".
+      Install via 'pip install six' or 'sudo easy_install six'.
+    ✗ libimobiledevice and ideviceinstaller are not installed. To install, run:
+        brew install --HEAD libimobiledevice
+        brew install ideviceinstaller
+    ✗ ios-deploy not installed. To install:
+        brew install ios-deploy
+    ✗ CocoaPods not installed.
+        CocoaPods is used to retrieve the iOS platform side's plugin code that responds to your plugin usage on the Dart side.
+        Without resolving iOS dependencies with CocoaPods, plugins will not work on iOS.
+        For more info, see https://flutter.io/platform-plugins
+      To install:
+        brew install cocoapods
+        pod setup
+[✓] Android Studio (version 2.3)
+[✓] Android Studio (version 3.1)
+[!] IntelliJ IDEA Ultimate Edition (version 2017.3.5)
+    ✗ Flutter plugin not installed; this adds Flutter specific functionality.
+    ✗ Dart plugin not installed; this adds Dart specific functionality.
+[✓] Connected devices (1 available)
+</code></pre>
+</div>
+
+<p>一般的错误会是xcode或Android Studio版本太低、或者没有 ANDROID_HOME 环境变量等，请按照提示解决。</p>
+
+<p>第一次运行一个flutter命令（如flutter doctor）时，它会下载它自己的依赖项并自行编译。以后再运行就会快得多。</p>
+
+<h1 id="创建第一个flutter项目">创建第一个Flutter项目</h1>
+
+<p>打开 Android Studio 依次选择 <code class="highlighter-rouge">Configure</code> -&gt; <code class="highlighter-rouge">Plugins</code>  -&gt; <code class="highlighter-rouge">在Plugins界面中搜索Flutter插件，下载重启Android Studio即可</code></p>
+<center>
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-6-15/18161308.jpg" width="500" />
+</center>
+<p>如果没有下载 <code class="highlighter-rouge">Flutter插件</code> 界面中是不会有 <code class="highlighter-rouge">Start a new Flutter project</code> 这个选项；
+重启完后 Android Studio 后选择 <code class="highlighter-rouge">Start a new Flutter project</code> 新建一个项目</p>
+<center>
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-6-15/54558576.jpg" width="500" />
+</center>
+<p>有三个选项创建项目</p>
+<ul>
+  <li>为最终用户创建一个“应用程序”</li>
+  <li>为开发人员公开Android或iOS API时选择一个“插件”</li>
+  <li>当创建一个纯DART组件时，选择一个“包”，比如一个新的小部件;
+  分别是：<code class="highlighter-rouge">应用程序</code>、<code class="highlighter-rouge">flutter插件</code>和<code class="highlighter-rouge">组件</code>，直接Next</li>
+</ul>
+<center>
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-6-15/56159641.jpg" width="500" />
+</center>
+<ul>
+  <li>Project name 项目名称</li>
+  <li>Flutter SDK path 之前下载的SDK路径，需要在<code class="highlighter-rouge">.bash_profile 文件中配置好环境变量</code></li>
+  <li>Project location 项目保存的目录，后面不用➕项目名称</li>
+  <li>Description 项目描述</li>
+</ul>
+
+<center>
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-6-15/53403261.jpg" width="500" />
+</center>
+<p>设置 <code class="highlighter-rouge">包名</code> 和 <code class="highlighter-rouge">偏好语言</code></p>
+
+<center>
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-6-15/7168886.jpg" width="900" />
+</center>
+
+<p>运行之后大概是这个样子</p>
+<p>
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-6-15/73720864.jpg" width="300" height="600" />
+<img src="http://p8i9mda7f.bkt.clouddn.com/18-6-15/87283131.jpg" width="300" height="600" />
+</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">最近的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/09/Kotlin-Application%E5%8D%95%E4%BE%8B%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E7%8E%B0/" title="link to Application单例化和属性的Delegated">Application单例化和属性的Delegated</a></h2>
+       <p class="excerpt">[TOC]我们很快要去实现一个数据库，如果我们想要保持我们代码的简洁性和层次性（而不是把所有代码添加到Activity中），我们就要需要有一个更简单的访问application context的方式。java方式实现按照我们在Java中一样创建一个单例最简单的方式：class App : Application() {    companion object {        private var instance: Application? = null        fun inst...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-09-03 08:00:00 +0900" class="post-list__meta--date date">2018-09-03</time> &#8226; <span class="post-list__meta--tags tags">Android Kotlin</span><a class="btn-border-small" href=/2018/09/Kotlin-Application%E5%8D%95%E4%BE%8B%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E7%8E%B0/>继续阅读</a></div>
+   </div>
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/06/Kotlin%E5%A4%9A%E5%B1%82%E5%BE%AA%E7%8E%AF%E8%B7%B3%E5%87%BA/" title="link to Kotlin多层循环跳出">Kotlin多层循环跳出</a></h2>
+       <p class="excerpt">​	在Java中，使用break可以跳出循环，默认情况下是跳出最近一层的循环，假如我们要跳出多层循环怎么办呢，Java替我们已经做好了这一点，就是用 循环标签 ：即是对某个循环定义一个名字，然后在 break 后面加上这个名字，当符合 break 条件时，程序就会跳到规定的循环。out:for (int i = 0; i &lt; 3; i++) {    System.out.println("i = " + i);    for (int j = 0; j &lt; 3; j++) {...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-06-12 08:00:00 +0900" class="post-list__meta--date date">2018-06-12</time> &#8226; <span class="post-list__meta--tags tags">Android Kotlin</span><a class="btn-border-small" href=/2018/06/Kotlin%E5%A4%9A%E5%B1%82%E5%BE%AA%E7%8E%AF%E8%B7%B3%E5%87%BA/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-09-03 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>

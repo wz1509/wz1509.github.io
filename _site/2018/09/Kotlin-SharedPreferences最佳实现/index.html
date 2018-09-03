@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <title>Kotlin SharedPreferences最佳实现</title>
+  <meta name="description" content="[TOC]">
+  <meta name="author" content="Wei Wang">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Kotlin SharedPreferences最佳实现">
+  <meta name="twitter:description" content="[TOC]">
+  
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="Kotlin SharedPreferences最佳实现">
+  <meta property="og:description" content="[TOC]">
+  
+  <link rel="icon" type="image/png" href="/assets/images/favicon.png" />
+  <link href="/assets/images/favicon.png" rel="shortcut icon" type="image/png">
+  
+  <link rel="stylesheet" href="/css/main.css">
+  <link href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="canonical" href="http://localhost:4000/2018/09/Kotlin-SharedPreferences%E6%9C%80%E4%BD%B3%E5%AE%9E%E7%8E%B0/">
+  <link rel="alternate" type="application/rss+xml" title="Wazing" href="http://localhost:4000/feed.xml">
+  
+  <meta name="google-site-verification" content="1-1ZlHoRvM0T2FqPbW2S-qLgYXN6rsn52kErlMPd_gw" />
+  
+</head>
+
+
+  <body>
+
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+    
+    <header class="panel-cover panel-cover--collapsed" style="background-image: url('/assets/images/background-cover.jpg')">
+  <div class="panel-main">
+
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/#blog" title="前往 Wazing 的主页" class="blog-button"><img src="/assets/images/avatar.jpg" width="80" alt="Wazing logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/#blog" title="link to homepage for Wazing" class="blog-button">Wazing</a></h1>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">无醇酒美人，不愿来此人间，无快剑挚友，不愿老此江湖。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        
+        
+        <div class="navigation-wrapper">
+          <div>
+            <nav class="cover-navigation cover-navigation--primary">
+              <ul class="navigation">
+                <li class="navigation__item"><a href="/#blog" title="Visit blog" class="blog-button">Blog</a></li>
+                
+              </ul>
+            </nav>
+          </div>
+          
+          <div><nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  
+
+  
+  <!-- Github -->
+  <li class="navigation__item">
+    <a href="https://github.com/wz1509" title="@wz1509 的 Github" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
+    </a>
+  </li>
+  
+  
+  
+
+  
+
+  <!-- RSS -->
+  <li class="navigation__item">
+    <a href="/feed.xml" rel="author" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+  
+  <!-- Email -->
+  <li class="navigation__item">
+    <a href="mailto:727417703@qq.com" title="Contact me">
+      <i class='social fa fa-envelope'></i>
+      <span class="label">Email</span>
+    </a>
+  </li>
+  
+
+  </ul>
+</nav>
+</div>
+        </div>
+      </div>
+    </div>
+    
+    
+    <div class="panel-cover--overlay cover-disabled"></div>
+    
+  </div>
+</header>
+
+
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single" itemscope itemtype="http://schema.org/BlogPosting">
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2018-09-03 08:30:00 +0900" itemprop="datePublished" class="post-meta__date date">2018-09-03</time> &#8226; <span class="post-meta__tags tags">Android Kotlin</span>
+    </div>
+    <h1 class="post-title">Kotlin SharedPreferences最佳实现</h1>
+  </header>
+
+  <section class="post">
+    <p>[TOC]</p>
+
+<h1 id="关于">关于</h1>
+
+<p>用于访问和修改返回的首选项数据的接口<strong>Context.getSharedPreferences(String, int)</strong>。对于任何特定的首选项集，所有客户端共享此类的单个实例。对首选项的修改必须通过SharedPreferences.Editor对象来确保首选项值保持一致状态并在提交存储时进行控制。从各种get方法返回的对象必须被应用程序视为不可变。</p>
+
+<p>注意：此类提供强大的一致性保证。它使用昂贵的操作可能会减慢应用程序的速度。经常改变可以容忍损失的属性或属性应该使用其他机制。有关详细信息读取上的评论 <strong>SharedPreferences.Editor.commit()</strong>和<strong>SharedPreferences.Editor.apply()</strong>。</p>
+
+<blockquote>
+  <p>注意：此类不支持跨多个进程使用。</p>
+</blockquote>
+
+<h1 id="概括">概括</h1>
+<p>嵌套类：</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>接口</th>
+      <th>方法</th>
+      <th>注释</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>interface</td>
+      <td>SharedPreferences.Editor</td>
+      <td>用于修改SharedPreferences 对象中的值的接口。</td>
+    </tr>
+    <tr>
+      <td>interface</td>
+      <td>SharedPreferences.OnSharedPreferenceChangeListener</td>
+      <td>更改共享首选项时要调用的回调的接口定义。</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>公共方法：</p>
+
+<p>返回值 | 函数名
+—|—
+abstract boolean | contains(String key)<br />检查Preferences中是否包含此key 
+abstract SharedPreferences.Editor | edit()<br />为这些首选项创建一个新的编辑器，通过该编辑器可以对首选项中的数据进行修改，并将这些更改原子地提交回SharedPreferences对象。
+abstract Map | getAll()<br />从首选项中检索所有值。
+abstract boolean | getBoolean(String key, boolean defValue)<br />从首选项中检索布尔值。
+abstract float | getFloat(String key, float defValue)<br />从首选项中检索浮点值。
+abstract int | getInt(String key, int defValue)<br />从首选项中检索int值。
+abstract long | getLong(String key, long defValue)<br />从首选项中检索长值。
+abstract String | getString(String key, String defValue)<br />从首选项中检索String值。
+abstract Set<String> | getStringSet(String key, Set<String> defValues)<br />从首选项中检索一组String值。
+abstract void | registerOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener)<br />注册在首选项发生更改时调用的回调。
+abstract void | unregisterOnSharedPreferenceChangeListener(SharedPreferences.OnSharedPreferenceChangeListener listener)<br />取消注册先前的回调。</String></String></p>
+
+<blockquote>
+  <p>上面表格乱版的 —»&gt; <a href="https://blog.csdn.net/Jokey_wz/article/details/82350759">Jokey’s blog</a>
+https://developer.android.com/reference/android/content/SharedPreferences</p>
+</blockquote>
+
+<h1 id="kotlin中对sharedpreferences的封装">kotlin中对SharedPreferences的封装</h1>
+
+<p>封装类：</p>
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">android.content.Context</span>
+<span class="k">import</span> <span class="nn">android.content.SharedPreferences</span>
+<span class="k">import</span> <span class="nn">android.preference.PreferenceManager</span>
+<span class="k">import</span> <span class="nn">kotlin.properties.ReadWriteProperty</span>
+<span class="k">import</span> <span class="nn">kotlin.reflect.KProperty</span>
+
+<span class="k">open</span> <span class="kd">class</span> <span class="nc">SharedPreferencesUtils</span><span class="p">(</span><span class="n">context</span><span class="p">:</span> <span class="n">Context</span><span class="p">)</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">preferences</span><span class="p">:</span> <span class="n">SharedPreferences</span> <span class="p">=</span> <span class="n">PreferenceManager</span><span class="p">.</span><span class="n">getDefaultSharedPreferences</span><span class="p">(</span><span class="n">context</span><span class="p">)</span>
+
+    <span class="kd">var</span> <span class="py">username</span> <span class="k">by</span> <span class="n">SharedPreferenceDelegates</span><span class="p">.</span><span class="n">string</span><span class="p">(</span><span class="n">defaultValue</span> <span class="p">=</span> <span class="s">"this is username"</span><span class="p">)</span>
+
+    <span class="kd">var</span> <span class="py">age</span> <span class="k">by</span> <span class="n">SharedPreferenceDelegates</span><span class="p">.</span><span class="n">int</span><span class="p">()</span>
+
+    <span class="kd">var</span> <span class="py">flag</span> <span class="k">by</span> <span class="n">SharedPreferenceDelegates</span><span class="p">.</span><span class="n">boolean</span><span class="p">()</span>
+
+    <span class="kd">var</span> <span class="py">currentDateTime</span><span class="p">:</span> <span class="n">Long</span> <span class="k">by</span> <span class="n">SharedPreferenceDelegates</span><span class="p">.</span><span class="n">long</span><span class="p">(</span><span class="n">System</span><span class="p">.</span><span class="n">currentTimeMillis</span><span class="p">())</span>
+
+    <span class="kd">var</span> <span class="py">money</span> <span class="k">by</span> <span class="n">SharedPreferenceDelegates</span><span class="p">.</span><span class="n">float</span><span class="p">()</span>
+
+    <span class="kd">var</span> <span class="py">setString</span> <span class="k">by</span> <span class="n">SharedPreferenceDelegates</span><span class="p">.</span><span class="n">setString</span><span class="p">()</span>
+
+    <span class="k">private</span> <span class="kd">object</span> <span class="nc">SharedPreferenceDelegates</span> <span class="p">{</span>
+
+        <span class="k">fun</span> <span class="nf">int</span><span class="p">(</span><span class="n">defaultValue</span><span class="p">:</span> <span class="n">Int</span> <span class="p">=</span> <span class="m">0</span><span class="p">)</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">ReadWriteProperty</span><span class="p">&lt;</span><span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">Int</span><span class="p">&gt;</span> <span class="p">{</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">getValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;):</span> <span class="n">Int</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">getInt</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Int</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">edit</span><span class="p">().</span><span class="n">putInt</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">).</span><span class="n">apply</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">fun</span> <span class="nf">long</span><span class="p">(</span><span class="n">defaultValue</span><span class="p">:</span> <span class="n">Long</span> <span class="p">=</span> <span class="m">0L</span><span class="p">)</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">ReadWriteProperty</span><span class="p">&lt;</span><span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">Long</span><span class="p">&gt;</span> <span class="p">{</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">getValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;):</span> <span class="n">Long</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">getLong</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Long</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">edit</span><span class="p">().</span><span class="n">putLong</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">).</span><span class="n">apply</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">fun</span> <span class="nf">boolean</span><span class="p">(</span><span class="n">defaultValue</span><span class="p">:</span> <span class="n">Boolean</span> <span class="p">=</span> <span class="k">false</span><span class="p">)</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">ReadWriteProperty</span><span class="p">&lt;</span><span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">Boolean</span><span class="p">&gt;</span> <span class="p">{</span>
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">getValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;):</span> <span class="n">Boolean</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">getBoolean</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Boolean</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">edit</span><span class="p">().</span><span class="n">putBoolean</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">).</span><span class="n">apply</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">fun</span> <span class="nf">float</span><span class="p">(</span><span class="n">defaultValue</span><span class="p">:</span> <span class="n">Float</span> <span class="p">=</span> <span class="m">0.0f</span><span class="p">)</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">ReadWriteProperty</span><span class="p">&lt;</span><span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">Float</span><span class="p">&gt;</span> <span class="p">{</span>
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">getValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;):</span> <span class="n">Float</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">getFloat</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Float</span><span class="p">)</span> <span class="p">{</span>
+                <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">edit</span><span class="p">().</span><span class="n">putFloat</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">).</span><span class="n">apply</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">fun</span> <span class="nf">string</span><span class="p">(</span><span class="n">defaultValue</span><span class="p">:</span> <span class="n">String</span><span class="p">?</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">ReadWriteProperty</span><span class="p">&lt;</span><span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">String</span><span class="p">?&gt;</span> <span class="p">{</span>
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">getValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;):</span> <span class="n">String</span><span class="p">?</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">getString</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;,</span> <span class="n">value</span><span class="p">:</span> <span class="n">String</span><span class="p">?)</span> <span class="p">{</span>
+                <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">edit</span><span class="p">().</span><span class="n">putString</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">).</span><span class="n">apply</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+
+        <span class="k">fun</span> <span class="nf">setString</span><span class="p">(</span><span class="n">defaultValue</span><span class="p">:</span> <span class="n">Set</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;?</span> <span class="p">=</span> <span class="k">null</span><span class="p">)</span> <span class="p">=</span> <span class="kd">object</span> <span class="err">: </span><span class="nc">ReadWriteProperty</span><span class="p">&lt;</span><span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">Set</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;?&gt;</span> <span class="p">{</span>
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">getValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;):</span> <span class="n">Set</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;?</span> <span class="p">{</span>
+                <span class="k">return</span> <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">getStringSet</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">defaultValue</span><span class="p">)</span>
+            <span class="p">}</span>
+
+            <span class="k">override</span> <span class="k">fun</span> <span class="nf">setValue</span><span class="p">(</span><span class="n">thisRef</span><span class="p">:</span> <span class="n">SharedPreferencesUtils</span><span class="p">,</span> <span class="n">property</span><span class="p">:</span> <span class="n">KProperty</span><span class="p">&lt;*&gt;,</span> <span class="n">value</span><span class="p">:</span> <span class="n">Set</span><span class="p">&lt;</span><span class="n">String</span><span class="p">&gt;?)</span> <span class="p">{</span>
+                <span class="n">thisRef</span><span class="p">.</span><span class="n">preferences</span><span class="p">.</span><span class="n">edit</span><span class="p">().</span><span class="n">putStringSet</span><span class="p">(</span><span class="n">property</span><span class="p">.</span><span class="n">name</span><span class="p">,</span> <span class="n">value</span><span class="p">).</span><span class="n">apply</span><span class="p">()</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>使用：</p>
+
+<div class="language-kotlin highlighter-rouge"><pre class="highlight"><code><span class="k">import</span> <span class="nn">android.annotation.SuppressLint</span>
+<span class="k">import</span> <span class="nn">android.support.v7.app.AppCompatActivity</span>
+<span class="k">import</span> <span class="nn">android.os.Bundle</span>
+<span class="k">import</span> <span class="nn">com.wazing.room.utils.SharedPreferencesUtils</span>
+<span class="k">import</span> <span class="nn">kotlinx.android.synthetic.main.activity_main.*</span>
+
+<span class="kd">class</span> <span class="nc">MainActivity</span> <span class="p">:</span> <span class="n">AppCompatActivity</span><span class="p">()</span> <span class="p">{</span>
+
+    <span class="k">private</span> <span class="kd">val</span> <span class="py">preferences</span> <span class="k">by</span> <span class="n">lazy</span> <span class="p">{</span> <span class="n">SharedPreferencesUtils</span><span class="p">(</span><span class="k">this</span><span class="p">)</span> <span class="p">}</span>
+
+    <span class="k">override</span> <span class="k">fun</span> <span class="nf">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">:</span> <span class="n">Bundle</span><span class="p">?)</span> <span class="p">{</span>
+        <span class="k">super</span><span class="p">.</span><span class="n">onCreate</span><span class="p">(</span><span class="n">savedInstanceState</span><span class="p">)</span>
+        <span class="n">setContentView</span><span class="p">(</span><span class="n">R</span><span class="p">.</span><span class="n">layout</span><span class="p">.</span><span class="n">activity_main</span><span class="p">)</span>
+
+        <span class="n">preferences</span><span class="p">.</span><span class="n">age</span> <span class="p">=</span> <span class="m">56</span>
+        <span class="n">preferences</span><span class="p">.</span><span class="n">username</span> <span class="p">=</span> <span class="s">"刘德华"</span>
+        <span class="n">preferences</span><span class="p">.</span><span class="n">flag</span> <span class="p">=</span> <span class="k">true</span>
+        <span class="n">preferences</span><span class="p">.</span><span class="n">money</span> <span class="p">=</span> <span class="m">9.30F</span>
+        <span class="n">preferences</span><span class="p">.</span><span class="n">currentDateTime</span> <span class="p">=</span> <span class="n">System</span><span class="p">.</span><span class="n">currentTimeMillis</span><span class="p">()</span>
+        <span class="n">preferences</span><span class="p">.</span><span class="n">setString</span> <span class="p">=</span> <span class="n">setOf</span><span class="p">(</span><span class="s">"Android"</span><span class="p">,</span> <span class="s">"Ios"</span><span class="p">)</span>
+
+        <span class="n">tv_content</span><span class="p">.</span><span class="n">text</span> <span class="p">=</span> <span class="n">StringBuffer</span><span class="p">().</span><span class="n">append</span><span class="p">(</span><span class="n">preferences</span><span class="p">.</span><span class="n">username</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"\n"</span><span class="p">).</span><span class="n">append</span><span class="p">(</span><span class="n">preferences</span><span class="p">.</span><span class="n">age</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"\n"</span><span class="p">).</span><span class="n">append</span><span class="p">(</span><span class="n">preferences</span><span class="p">.</span><span class="n">flag</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"\n"</span><span class="p">).</span><span class="n">append</span><span class="p">(</span><span class="n">preferences</span><span class="p">.</span><span class="n">money</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"\n"</span><span class="p">).</span><span class="n">append</span><span class="p">(</span><span class="n">preferences</span><span class="p">.</span><span class="n">currentDateTime</span><span class="p">)</span>
+                <span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="s">"\n"</span><span class="p">).</span><span class="n">append</span><span class="p">(</span><span class="n">preferences</span><span class="p">.</span><span class="n">setString</span><span class="p">.</span><span class="n">toString</span><span class="p">())</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p>可以看出采用kotlin的委托属性更加方便，直接在<strong>SharedPreferencesUtils</strong>中定义属性，该属性作为key就可以开始用。</p>
+
+<p>效果图：</p>
+
+<p>&lt;div align=center&gt;<img width="480" height="800" src="http://p8i9mda7f.bkt.clouddn.com/18-9-3/17194331.jpg" />&lt;/div&gt;</p>
+
+  </section>
+</article>
+
+<section class="read-more">
+   
+   
+   
+   
+   <div class="read-more-item">
+       <span class="read-more-item-dim">更早的文章</span>
+       <h2 class="post-list__post-title post-title"><a href="/2018/09/Kotlin-Application%E5%8D%95%E4%BE%8B%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E7%8E%B0/" title="link to Application单例化和属性的Delegated">Application单例化和属性的Delegated</a></h2>
+       <p class="excerpt">[TOC]我们很快要去实现一个数据库，如果我们想要保持我们代码的简洁性和层次性（而不是把所有代码添加到Activity中），我们就要需要有一个更简单的访问application context的方式。java方式实现按照我们在Java中一样创建一个单例最简单的方式：class App : Application() {    companion object {        private var instance: Application? = null        fun inst...&hellip;</p>
+       <div class="post-list__meta"><time datetime="2018-09-03 08:00:00 +0900" class="post-list__meta--date date">2018-09-03</time> &#8226; <span class="post-list__meta--tags tags">Android Kotlin</span><a class="btn-border-small" href=/2018/09/Kotlin-Application%E5%8D%95%E4%BE%8B%E5%8C%96%E6%9C%80%E4%BD%B3%E5%AE%9E%E7%8E%B0/>继续阅读</a></div>
+   </div>
+   
+</section>
+
+<section class="post-comments">
+  
+  
+  
+  
+</section>
+
+
+            <section class="footer">
+    <footer>
+    	<span class="footer__copyright">本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享 署名-非商业性使用-相同方式共享 4.0 国际 许可协议</a></span>
+        <span class="footer__copyright">由 <a href="https://jekyllrb.com">Jekyll</a> 于 2018-09-03 生成，感谢 <a href="https://www.digitalocean.com/?refcode=30ed2d146762">Digital Ocean</a> 为本站提供稳定的 VPS 服务</span>
+        <span class="footer__copyright">本站由 <a href="http://onev.cat">@onevcat</a> 创建，采用 <a href="https://github.com/onevcat/vno-jekyll">Vno - Jekyll</a> 作为主题，您可以在 GitHub 找到<a href="https://github.com/onevcat/OneV-s-Den">本站源码</a> - &copy; 2018</span>
+    </footer>
+</section>
+
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+
+<script type="text/javascript" src="/js/main.js"></script>
+
+
+
+    
+  </body>
+
+</html>
